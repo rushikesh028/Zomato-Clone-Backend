@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TastyBuddy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+          --red: #E50914;
+          --red-dark: #b20710;
+          --bg: #0d0d0d;
+          --surface: #141414;
+          --surface2: #1f1f1f;
+          --text: #ffffff;
+          --muted: #a3a3a3;
+          --border: #2a2a2a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+          background: var(--bg);
+          color: var(--text);
+          font-family: 'DM Sans', sans-serif;
+          overflow-x: hidden;
+        }
+
+        /* NAVBAR */
+        nav {
+          position: fixed;
+          top: 0; left: 0; right: 0;
+          z-index: 100;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 4vw;
+          height: 64px;
+          background: linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, transparent 100%);
+          transition: background 0.3s;
+        }
+        nav.scrolled { background: rgba(13,13,13,0.98); }
+
+        .logo {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 2rem;
+          letter-spacing: 2px;
+          color: var(--red);
+          cursor: pointer;
+        }
+        .logo span { color: #fff; }
+
+        .nav-links {
+          display: flex;
+          gap: 24px;
+          list-style: none;
+        }
+        .nav-links a {
+          color: var(--muted);
+          text-decoration: none;
+          font-size: 0.85rem;
+          font-weight: 500;
+          transition: color 0.2s;
+        }
+        .nav-links a:hover { color: #fff; }
+
+        .nav-right {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+
+        .cart-btn {
+          position: relative;
+          background: none;
+          border: none;
+          cursor: pointer;
+          color: #fff;
+          font-size: 1.4rem;
+        }
+        .cart-badge {
+          position: absolute;
+          top: -6px; right: -6px;
+          background: var(--red);
+          color: #fff;
+          font-size: 0.65rem;
+          font-weight: 700;
+          width: 18px; height: 18px;
+          border-radius: 50%;
+          display: flex; align-items: center; justify-content: center;
+        }
+
+        .avatar {
+          width: 32px; height: 32px;
+          border-radius: 4px;
+          background: var(--red);
+          display: flex; align-items: center; justify-content: center;
+          font-size: 0.75rem;
+          font-weight: 700;
+          cursor: pointer;
+        }
+
+        /* HERO */
+        .hero {
+          position: relative;
+          height: 92vh;
+          min-height: 560px;
+          display: flex;
+          align-items: flex-end;
+          padding: 0 4vw 8vh;
+          overflow: hidden;
+        }
+
+        .hero-bg {
+          position: absolute;
+          inset: 0;
+          background:
+            linear-gradient(to right, rgba(0,0,0,0.88) 40%, transparent 100%),
+            linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%),
+            url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=1600&q=80') center/cover no-repeat;
+          transform: scale(1.04);
+          animation: heroZoom 14s ease-in-out infinite alternate;
+        }
+
+        @keyframes heroZoom {
+          from { transform: scale(1.04); }
+          to { transform: scale(1.0); }
+        }
+
+        .hero-content {
+          position: relative;
+          max-width: 540px;
+          animation: heroFadeIn 1.2s ease forwards;
+        }
+        @keyframes heroFadeIn {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          background: var(--red);
+          color: #fff;
+          font-size: 0.7rem;
+          font-weight: 700;
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
+          padding: 5px 12px;
+          border-radius: 3px;
+          margin-bottom: 16px;
+        }
+
+        .hero-title {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: clamp(3.5rem, 7vw, 6rem);
+          line-height: 0.95;
+          letter-spacing: 1px;
+          margin-bottom: 16px;
+        }
+
+        .hero-title .highlight { color: var(--red); }
+
+        .hero-desc {
+          color: rgba(255,255,255,0.8);
+          font-size: 1rem;
+          line-height: 1.6;
+          max-width: 400px;
+          margin-bottom: 28px;
+        }
+
+        .hero-meta {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          margin-bottom: 28px;
+          font-size: 0.85rem;
+          color: var(--muted);
+        }
+        .hero-meta span { display: flex; align-items: center; gap: 5px; }
+        .star { color: #f5c518; }
+        .hero-meta .dot { color: var(--border); }
+
+        .hero-actions {
+          display: flex;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+
+        .btn-primary {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          background: var(--red);
+          color: #fff;
+          border: none;
+          padding: 13px 28px;
+          border-radius: 5px;
+          font-family: 'DM Sans', sans-serif;
+          font-size: 0.95rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: background 0.2s, transform 0.15s;
+        }
+        .btn-primary:hover { background: var(--red-dark); transform: scale(1.03); }
+
+        .btn-secondary {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          background: rgba(255,255,255,0.15);
+          backdrop-filter: blur(10px);
+          color: #fff;
+          border: 1px solid rgba(255,255,255,0.2);
+          padding: 13px 28px;
+          border-radius: 5px;
+          font-family: 'DM Sans', sans-serif;
+          font-size: 0.95rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        .btn-secondary:hover { background: rgba(255,255,255,0.25); }
+
+        /* CATEGORY PILLS */
+        .category-strip {
+          padding: 28px 4vw 8px;
+          display: flex;
+          gap: 10px;
+          overflow-x: auto;
+          scrollbar-width: none;
+        }
+        .category-strip::-webkit-scrollbar { display: none; }
+
+        .pill {
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          background: var(--surface2);
+          border: 1px solid var(--border);
+          color: var(--muted);
+          padding: 8px 18px;
+          border-radius: 50px;
+          font-size: 0.82rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s;
+          white-space: nowrap;
+        }
+        .pill:hover, .pill.active {
+          background: var(--red);
+          border-color: var(--red);
+          color: #fff;
+        }
+        .pill .emoji { font-size: 1rem; }
+
+        /* ROW SECTION */
+        .section { padding: 32px 0 8px; }
+
+        .section-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 4vw;
+          margin-bottom: 16px;
+        }
+
+        .section-title {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 1.5rem;
+          letter-spacing: 1px;
+        }
+
+        .section-link {
+          color: var(--muted);
+          font-size: 0.8rem;
+          font-weight: 500;
+          text-decoration: none;
+          cursor: pointer;
+          transition: color 0.2s;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
+        .section-link:hover { color: var(--red); }
+
+        .row-scroll {
+          display: flex;
+          gap: 14px;
+          padding: 0 4vw 16px;
+          overflow-x: auto;
+          scrollbar-width: none;
+          scroll-behavior: smooth;
+        }
+        .row-scroll::-webkit-scrollbar { display: none; }
+
+        /* FOOD CARD */
+        .food-card {
+          flex-shrink: 0;
+          width: 220px;
+          border-radius: 8px;
+          overflow: hidden;
+          background: var(--surface);
+          cursor: pointer;
+          transition: transform 0.3s, box-shadow 0.3s;
+          position: relative;
+        }
+        .food-card:hover {
+          transform: scale(1.06) translateY(-4px);
+          box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+          z-index: 10;
+        }
+
+        .food-card-img {
+          width: 100%;
+          height: 140px;
+          object-fit: cover;
+          display: block;
+          background: var(--surface2);
+        }
+
+        .food-card-body {
+          padding: 12px 14px 14px;
+        }
+
+        .food-card-top {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          margin-bottom: 4px;
+        }
+
+        .food-card-name {
+          font-size: 0.9rem;
+          font-weight: 600;
+          line-height: 1.3;
+          flex: 1;
+          margin-right: 8px;
+        }
+
+        .food-card-price {
+          font-size: 0.95rem;
+          font-weight: 700;
+          color: var(--red);
+          white-space: nowrap;
+        }
+
+        .food-card-rest {
+          font-size: 0.75rem;
+          color: var(--muted);
+          margin-bottom: 10px;
+        }
+
+        .food-card-footer {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .food-card-rating {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          font-size: 0.75rem;
+          color: var(--muted);
+        }
+        .food-card-rating .star { font-size: 0.7rem; }
+
+        .add-btn {
+          width: 28px; height: 28px;
+          border-radius: 50%;
+          background: var(--red);
+          border: none;
+          color: #fff;
+          font-size: 1.2rem;
+          display: flex; align-items: center; justify-content: center;
+          cursor: pointer;
+          transition: transform 0.15s, background 0.2s;
+        }
+        .add-btn:hover { background: var(--red-dark); transform: scale(1.15); }
+
+        /* PROMO BADGE */
+        .promo-badge {
+          position: absolute;
+          top: 10px; left: 10px;
+          background: var(--red);
+          color: #fff;
+          font-size: 0.65rem;
+          font-weight: 700;
+          padding: 3px 8px;
+          border-radius: 3px;
+          letter-spacing: 0.5px;
+          text-transform: uppercase;
+        }
+
+        /* WIDE CARD */
+        .wide-card {
+          flex-shrink: 0;
+          width: 320px;
+          border-radius: 8px;
+          overflow: hidden;
+          background: var(--surface);
+          cursor: pointer;
+          transition: transform 0.3s, box-shadow 0.3s;
+          position: relative;
+        }
+        .wide-card:hover {
+          transform: scale(1.04) translateY(-4px);
+          box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+          z-index: 10;
+        }
+
+        .wide-card-img {
+          width: 100%;
+          height: 170px;
+          object-fit: cover;
+          background: var(--surface2);
+        }
+        .wide-card-body { padding: 14px 16px 16px; }
+        .wide-card-name {
+          font-size: 1rem;
+          font-weight: 600;
+          margin-bottom: 4px;
+        }
+        .wide-card-cuisine {
+          font-size: 0.78rem;
+          color: var(--muted);
+          margin-bottom: 12px;
+        }
+        .wide-card-stats {
+          display: flex;
+          gap: 18px;
+          font-size: 0.78rem;
+          color: var(--muted);
+        }
+        .wide-card-stats span {
+          display: flex; align-items: center; gap: 4px;
+        }
+
+        /* BANNER */
+        .banner {
+          margin: 24px 4vw;
+          border-radius: 12px;
+          padding: 32px 40px;
+          background: linear-gradient(135deg, #1a0000 0%, #3d0000 40%, #1a0000 100%);
+          border: 1px solid rgba(229,9,20,0.3);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 24px;
+          flex-wrap: wrap;
+          position: relative;
+          overflow: hidden;
+        }
+        .banner::before {
+          content: '';
+          position: absolute;
+          right: -40px; top: -40px;
+          width: 220px; height: 220px;
+          background: radial-gradient(circle, rgba(229,9,20,0.15) 0%, transparent 70%);
+        }
+        .banner-left h2 {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 2rem;
+          letter-spacing: 1px;
+          margin-bottom: 6px;
+        }
+        .banner-left p {
+          color: rgba(255,255,255,0.65);
+          font-size: 0.9rem;
+        }
+
+        /* FOOTER */
+        footer {
+          padding: 48px 4vw 32px;
+          border-top: 1px solid var(--border);
+          margin-top: 48px;
+        }
+        .footer-logo {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 1.8rem;
+          letter-spacing: 2px;
+          color: var(--red);
+          margin-bottom: 6px;
+        }
+        .footer-logo span { color: #fff; }
+        .footer-tagline {
+          color: var(--muted);
+          font-size: 0.82rem;
+          margin-bottom: 32px;
+        }
+        .footer-links {
+          display: flex;
+          gap: 24px;
+          flex-wrap: wrap;
+          margin-bottom: 32px;
+        }
+        .footer-links a {
+          color: var(--muted);
+          font-size: 0.8rem;
+          text-decoration: none;
+          transition: color 0.2s;
+        }
+        .footer-links a:hover { color: #fff; }
+        .footer-bottom {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 12px;
+          color: rgba(163,163,163,0.5);
+          font-size: 0.75rem;
+        }
+
+        /* MODAL */
+        .modal-overlay {
+          display: none;
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,0.85);
+          z-index: 200;
+          align-items: center;
+          justify-content: center;
+          backdrop-filter: blur(4px);
+          animation: fadeIn 0.2s ease;
+        }
+        .modal-overlay.open { display: flex; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .modal {
+          background: var(--surface);
+          border-radius: 12px;
+          width: 90%;
+          max-width: 500px;
+          overflow: hidden;
+          animation: slideUp 0.3s ease;
+          border: 1px solid var(--border);
+        }
+        @keyframes slideUp {
+          from { transform: translateY(40px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-img {
+          width: 100%;
+          height: 230px;
+          object-fit: cover;
+          background: var(--surface2);
+        }
+        .modal-body { padding: 24px; }
+        .modal-title {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 2rem;
+          letter-spacing: 1px;
+          margin-bottom: 6px;
+        }
+        .modal-rest {
+          color: var(--muted);
+          font-size: 0.85rem;
+          margin-bottom: 14px;
+        }
+        .modal-desc {
+          color: rgba(255,255,255,0.7);
+          font-size: 0.88rem;
+          line-height: 1.6;
+          margin-bottom: 20px;
+        }
+        .modal-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 20px;
+        }
+        .modal-price {
+          font-size: 1.6rem;
+          font-weight: 700;
+          color: var(--red);
+        }
+        .qty-ctrl {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+        .qty-ctrl button {
+          width: 32px; height: 32px;
+          border-radius: 50%;
+          background: var(--surface2);
+          border: 1px solid var(--border);
+          color: #fff;
+          font-size: 1rem;
+          cursor: pointer;
+          display: flex; align-items: center; justify-content: center;
+          transition: background 0.2s;
+        }
+        .qty-ctrl button:hover { background: var(--red); border-color: var(--red); }
+        .qty-ctrl span { font-size: 1rem; font-weight: 600; min-width: 20px; text-align: center; }
+        .modal-close {
+          position: absolute;
+          top: 16px; right: 16px;
+          width: 36px; height: 36px;
+          border-radius: 50%;
+          background: rgba(0,0,0,0.6);
+          border: none;
+          color: #fff;
+          font-size: 1.1rem;
+          cursor: pointer;
+          display: flex; align-items: center; justify-content: center;
+        }
+
+        /* TOAST */
+        .toast {
+          position: fixed;
+          bottom: 32px;
+          left: 50%;
+          transform: translateX(-50%) translateY(100px);
+          background: #1e1e1e;
+          border: 1px solid var(--border);
+          border-left: 4px solid var(--red);
+          color: #fff;
+          padding: 14px 22px;
+          border-radius: 8px;
+          font-size: 0.88rem;
+          font-weight: 500;
+          z-index: 300;
+          transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          white-space: nowrap;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+    <div class="logo">TASTY<span>BUDDY</span></div>
+    <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Restaurants</a></li>
+        <li><a href="#">Offers</a></li>
+        <li><a href="#">Track Order</a></li>
+    </ul>
+    <div class="nav-right">
+        <button class="cart-btn" onclick="openCart()">🛒
+            <span class="cart-badge" id="cartCount">0</span>
+        </button>
+        <div class="avatar">JS</div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+        <div class="hero-badge">🔥 Featured Today</div>
+        <h1 class="hero-title">WOOD-FIRED<br><span class="highlight">MARGHERITA</span><br>PIZZA</h1>
+        <p class="hero-desc">Hand-tossed with San Marzano tomatoes, buffalo mozzarella, and fresh basil. Baked in a 900°F oven for that perfect char.</p>
+        <div class="hero-meta">
+            <span><span class="star">★</span> 4.9</span>
+            <span class="dot">•</span>
+            <span>🕐 22 min</span>
+            <span class="dot">•</span>
+            <span>Bella Italia</span>
+        </div>
+        <div class="hero-actions">
+            <button class="btn-primary" onclick="heroOrder()">▶ Order Now</button>
+            <button class="btn-secondary" onclick="heroMore()">ℹ More Info</button>
+        </div>
+    </div>
+</div>
+
+<!-- CATEGORY PILLS -->
+<div class="category-strip">
+    <div class="pill active" onclick="setActive(this)"><span class="emoji">🍕</span> Pizza</div>
+    <div class="pill" onclick="setActive(this)"><span class="emoji">🍔</span> Burgers</div>
+    <div class="pill" onclick="setActive(this)"><span class="emoji">🍜</span> Noodles</div>
+    <div class="pill" onclick="setActive(this)"><span class="emoji">🍣</span> Sushi</div>
+    <div class="pill" onclick="setActive(this)"><span class="emoji">🌮</span> Mexican</div>
+    <div class="pill" onclick="setActive(this)"><span class="emoji">🍗</span> Chicken</div>
+    <div class="pill" onclick="setActive(this)"><span class="emoji">🥗</span> Healthy</div>
+    <div class="pill" onclick="setActive(this)"><span class="emoji">🍰</span> Desserts</div>
+    <div class="pill" onclick="setActive(this)"><span class="emoji">🥤</span> Drinks</div>
+    <div class="pill" onclick="setActive(this)"><span class="emoji">🍛</span> Indian</div>
+    <div class="pill" onclick="setActive(this)"><span class="emoji">🥩</span> BBQ</div>
+</div>
+
+<!-- TRENDING NOW -->
+<div class="section">
+    <div class="section-header">
+        <div class="section-title">🔥 Trending Now</div>
+        <a class="section-link">See All ›</a>
+    </div>
+    <div class="row-scroll">
+        <div class="food-card" onclick="openModal('Pepperoni Blast','Bella Italia','Loaded with double pepperoni, fresh mozzarella, and tangy tomato sauce on a crispy thin base.','₹399','https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&q=80','4.8','22 min')">
+            <img class="food-card-img" src="https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&q=80" alt="Pizza">
+            <div class="promo-badge">HOT</div>
+            <div class="food-card-body">
+                <div class="food-card-top">
+                    <div class="food-card-name">Pepperoni Blast</div>
+                    <div class="food-card-price">₹399</div>
+                </div>
+                <div class="food-card-rest">Bella Italia</div>
+                <div class="food-card-footer">
+                    <div class="food-card-rating"><span class="star">★</span> 4.8 · 22 min</div>
+                    <button class="add-btn" onclick="event.stopPropagation(); addToCart('Pepperoni Blast', 399)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="food-card" onclick="openModal('Smash Burger','Burger Lab','Two smashed beef patties, American cheese, pickles, and secret sauce on a brioche bun.','₹349','https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80','4.7','18 min')">
+            <img class="food-card-img" src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80" alt="Burger">
+            <div class="food-card-body">
+                <div class="food-card-top">
+                    <div class="food-card-name">Smash Burger</div>
+                    <div class="food-card-price">₹349</div>
+                </div>
+                <div class="food-card-rest">Burger Lab</div>
+                <div class="food-card-footer">
+                    <div class="food-card-rating"><span class="star">★</span> 4.7 · 18 min</div>
+                    <button class="add-btn" onclick="event.stopPropagation(); addToCart('Smash Burger', 349)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="food-card" onclick="openModal('Tonkotsu Ramen','Noodle House','Rich 12-hour pork bone broth with chashu pork, soft-boiled egg, nori, and bamboo shoots.','₹449','https://images.unsplash.com/photo-1557872943-16a5ac26437e?w=400&q=80','4.9','28 min')">
+            <img class="food-card-img" src="https://images.unsplash.com/photo-1557872943-16a5ac26437e?w=400&q=80" alt="Ramen">
+            <div class="promo-badge">CHEF'S PICK</div>
+            <div class="food-card-body">
+                <div class="food-card-top">
+                    <div class="food-card-name">Tonkotsu Ramen</div>
+                    <div class="food-card-price">₹449</div>
+                </div>
+                <div class="food-card-rest">Noodle House</div>
+                <div class="food-card-footer">
+                    <div class="food-card-rating"><span class="star">★</span> 4.9 · 28 min</div>
+                    <button class="add-btn" onclick="event.stopPropagation(); addToCart('Tonkotsu Ramen', 449)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="food-card" onclick="openModal('Spicy Tuna Roll','Sushi Zen','Fresh tuna, cucumber, avocado in a crispy rice roll topped with sriracha mayo and tobiko.','₹529','https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=400&q=80','4.8','35 min')">
+            <img class="food-card-img" src="https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=400&q=80" alt="Sushi">
+            <div class="food-card-body">
+                <div class="food-card-top">
+                    <div class="food-card-name">Spicy Tuna Roll</div>
+                    <div class="food-card-price">₹529</div>
+                </div>
+                <div class="food-card-rest">Sushi Zen</div>
+                <div class="food-card-footer">
+                    <div class="food-card-rating"><span class="star">★</span> 4.8 · 35 min</div>
+                    <button class="add-btn" onclick="event.stopPropagation(); addToCart('Spicy Tuna Roll', 529)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="food-card" onclick="openModal('Butter Chicken','Spice Route','Tender chicken in a rich, creamy tomato-cashew gravy with aromatic spices. Served with garlic naan.','₹379','https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&q=80','4.9','25 min')">
+            <img class="food-card-img" src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&q=80" alt="Butter Chicken">
+            <div class="promo-badge">BESTSELLER</div>
+            <div class="food-card-body">
+                <div class="food-card-top">
+                    <div class="food-card-name">Butter Chicken</div>
+                    <div class="food-card-price">₹379</div>
+                </div>
+                <div class="food-card-rest">Spice Route</div>
+                <div class="food-card-footer">
+                    <div class="food-card-rating"><span class="star">★</span> 4.9 · 25 min</div>
+                    <button class="add-btn" onclick="event.stopPropagation(); addToCart('Butter Chicken', 379)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="food-card" onclick="openModal('Mango Cheesecake','Sweet Lab','No-bake cheesecake with Alphonso mango coulis and a buttery graham cracker crust.','₹299','https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80','4.7','15 min')">
+            <img class="food-card-img" src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80" alt="Cheesecake">
+            <div class="food-card-body">
+                <div class="food-card-top">
+                    <div class="food-card-name">Mango Cheesecake</div>
+                    <div class="food-card-price">₹299</div>
+                </div>
+                <div class="food-card-rest">Sweet Lab</div>
+                <div class="food-card-footer">
+                    <div class="food-card-rating"><span class="star">★</span> 4.7 · 15 min</div>
+                    <button class="add-btn" onclick="event.stopPropagation(); addToCart('Mango Cheesecake', 299)">+</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PROMO BANNER -->
+<div class="banner">
+    <div class="banner-left">
+        <h2>🎉 50% OFF YOUR FIRST ORDER</h2>
+        <p>Use code <strong>TASTY50</strong> at checkout. Valid till midnight tonight!</p>
+    </div>
+    <button class="btn-primary" style="flex-shrink:0">Claim Offer →</button>
+</div>
+
+<!-- TOP RESTAURANTS -->
+<div class="section">
+    <div class="section-header">
+        <div class="section-title">🏆 Top Restaurants Near You</div>
+        <a class="section-link">See All ›</a>
+    </div>
+    <div class="row-scroll">
+        <div class="wide-card">
+            <img class="wide-card-img" src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500&q=80" alt="Restaurant">
+            <div class="promo-badge">OPEN</div>
+            <div class="wide-card-body">
+                <div class="wide-card-name">Bella Italia</div>
+                <div class="wide-card-cuisine">Italian · Pizza · Pasta</div>
+                <div class="wide-card-stats">
+                    <span><span class="star">★</span> 4.8</span>
+                    <span>🕐 22–30 min</span>
+                    <span>🛵 Free delivery</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="wide-card">
+            <img class="wide-card-img" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=80" alt="Restaurant">
+            <div class="wide-card-body">
+                <div class="wide-card-name">The Grand Grill</div>
+                <div class="wide-card-cuisine">American · Steakhouse · BBQ</div>
+                <div class="wide-card-stats">
+                    <span><span class="star">★</span> 4.7</span>
+                    <span>🕐 30–45 min</span>
+                    <span>🛵 ₹29 delivery</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="wide-card">
+            <img class="wide-card-img" src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500&q=80" alt="Restaurant">
+            <div class="promo-badge">POPULAR</div>
+            <div class="wide-card-body">
+                <div class="wide-card-name">Spice Route</div>
+                <div class="wide-card-cuisine">Indian · Curry · Biryani</div>
+                <div class="wide-card-stats">
+                    <span><span class="star">★</span> 4.9</span>
+                    <span>🕐 25–35 min</span>
+                    <span>🛵 Free delivery</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="wide-card">
+            <img class="wide-card-img" src="https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=500&q=80" alt="Restaurant">
+            <div class="wide-card-body">
+                <div class="wide-card-name">Noodle House</div>
+                <div class="wide-card-cuisine">Japanese · Ramen · Sushi</div>
+                <div class="wide-card-stats">
+                    <span><span class="star">★</span> 4.8</span>
+                    <span>🕐 28–40 min</span>
+                    <span>🛵 ₹49 delivery</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="wide-card">
+            <img class="wide-card-img" src="https://images.unsplash.com/photo-1498654896293-37aacf113fd9?w=500&q=80" alt="Restaurant">
+            <div class="wide-card-body">
+                <div class="wide-card-name">Burger Lab</div>
+                <div class="wide-card-cuisine">American · Burgers · Fries</div>
+                <div class="wide-card-stats">
+                    <span><span class="star">★</span> 4.7</span>
+                    <span>🕐 15–25 min</span>
+                    <span>🛵 Free delivery</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ORDER AGAIN -->
+<div class="section">
+    <div class="section-header">
+        <div class="section-title">🔁 Order Again</div>
+        <a class="section-link">See All ›</a>
+    </div>
+    <div class="row-scroll">
+        <div class="food-card" onclick="openModal('Chicken Biryani','Spice Route','Fragrant basmati rice cooked with tender chicken, caramelized onions, and whole spices. Served with raita.','₹359','https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=400&q=80','4.9','30 min')">
+            <img class="food-card-img" src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=400&q=80" alt="Biryani">
+            <div class="food-card-body">
+                <div class="food-card-top">
+                    <div class="food-card-name">Chicken Biryani</div>
+                    <div class="food-card-price">₹359</div>
+                </div>
+                <div class="food-card-rest">Spice Route</div>
+                <div class="food-card-footer">
+                    <div class="food-card-rating"><span class="star">★</span> 4.9 · 30 min</div>
+                    <button class="add-btn" onclick="event.stopPropagation(); addToCart('Chicken Biryani', 359)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="food-card" onclick="openModal('BBQ Chicken Wings','The Grand Grill','12 crispy wings tossed in smoky BBQ glaze. Served with blue cheese dip and celery sticks.','₹419','https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=400&q=80','4.8','20 min')">
+            <img class="food-card-img" src="https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=400&q=80" alt="Wings">
+            <div class="food-card-body">
+                <div class="food-card-top">
+                    <div class="food-card-name">BBQ Chicken Wings</div>
+                    <div class="food-card-price">₹419</div>
+                </div>
+                <div class="food-card-rest">The Grand Grill</div>
+                <div class="food-card-footer">
+                    <div class="food-card-rating"><span class="star">★</span> 4.8 · 20 min</div>
+                    <button class="add-btn" onclick="event.stopPropagation(); addToCart('BBQ Chicken Wings', 419)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="food-card" onclick="openModal('Acai Bowl','Green Bowl','Organic acai blended with banana, topped with granola, fresh berries, chia seeds, and coconut flakes.','₹329','https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38?w=400&q=80','4.6','12 min')">
+            <img class="food-card-img" src="https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38?w=400&q=80" alt="Acai Bowl">
+            <div class="food-card-body">
+                <div class="food-card-top">
+                    <div class="food-card-name">Açaí Bowl</div>
+                    <div class="food-card-price">₹329</div>
+                </div>
+                <div class="food-card-rest">Green Bowl</div>
+                <div class="food-card-footer">
+                    <div class="food-card-rating"><span class="star">★</span> 4.6 · 12 min</div>
+                    <button class="add-btn" onclick="event.stopPropagation(); addToCart('Açaí Bowl', 329)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="food-card" onclick="openModal('Tacos Al Pastor','Casa Verde','Slow-marinated pork with pineapple, onion, and cilantro on handmade corn tortillas. Comes with 3 tacos.','₹389','https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&q=80','4.7','20 min')">
+            <img class="food-card-img" src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&q=80" alt="Tacos">
+            <div class="food-card-body">
+                <div class="food-card-top">
+                    <div class="food-card-name">Tacos Al Pastor</div>
+                    <div class="food-card-price">₹389</div>
+                </div>
+                <div class="food-card-rest">Casa Verde</div>
+                <div class="food-card-footer">
+                    <div class="food-card-rating"><span class="star">★</span> 4.7 · 20 min</div>
+                    <button class="add-btn" onclick="event.stopPropagation(); addToCart('Tacos Al Pastor', 389)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="food-card" onclick="openModal('Chocolate Lava Cake','Sweet Lab','Warm dark chocolate molten cake with a gooey center, served with vanilla bean ice cream.','₹249','https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&q=80','4.9','15 min')">
+            <img class="food-card-img" src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&q=80" alt="Lava Cake">
+            <div class="promo-badge">FAV</div>
+            <div class="food-card-body">
+                <div class="food-card-top">
+                    <div class="food-card-name">Choco Lava Cake</div>
+                    <div class="food-card-price">₹249</div>
+                </div>
+                <div class="food-card-rest">Sweet Lab</div>
+                <div class="food-card-footer">
+                    <div class="food-card-rating"><span class="star">★</span> 4.9 · 15 min</div>
+                    <button class="add-btn" onclick="event.stopPropagation(); addToCart('Choco Lava Cake', 249)">+</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-logo">TASTY<span>BUDDY</span></div>
+    <div class="footer-tagline">Delivering happiness, one bite at a time.</div>
+    <div class="footer-links">
+        <a href="#">About Us</a>
+        <a href="#">Careers</a>
+        <a href="#">Partner with Us</a>
+        <a href="#">Help Center</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Blog</a>
+    </div>
+    <div class="footer-bottom">
+        <span>© 2026 TastyBuddy. All rights reserved.</span>
+        <span>🇮🇳 India</span>
+    </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+    <div class="modal" style="position:relative">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <img class="modal-img" id="modalImg" src="" alt="Food">
+        <div class="modal-body">
+            <div class="modal-title" id="modalTitle"></div>
+            <div class="modal-rest" id="modalRest"></div>
+            <div class="modal-desc" id="modalDesc"></div>
+            <div class="modal-row">
+                <div class="modal-price" id="modalPrice"></div>
+                <div class="qty-ctrl">
+                    <button onclick="changeQty(-1)">−</button>
+                    <span id="qtyVal">1</span>
+                    <button onclick="changeQty(1)">+</button>
+                </div>
+            </div>
+            <button class="btn-primary" style="width:100%;justify-content:center" onclick="addFromModal()">🛒 Add to Cart</button>
+            <button onclick="loginUser()" class="btn-secondary">Login</button>
+        </div>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✅ Added to cart!</div>
+
+<script>
+
+    window.onload = () => {
+    if (!getToken()) {
+        showToast("⚠ Please login first");
+    }
+};
+
+
+    let cart = [];
+    let modalItem = { name: '', price: 0 };
+    let qty = 1;
+
+    const BASE_URL = "http://localhost:8080";
+
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    function setActive(el) {
+      document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    function addToCart(name, price) {
+      cart.push({ name, price, qty: 1 });
+      document.getElementById('cartCount').textContent = cart.length;
+      showToast(`🛒 ${name} added!`);
+    }
+
+    function openCart() {
+      let total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      showToast(`🛒 ${cart.length} items | ₹${total}`);
+    }
+
+    function openModal(name, rest, desc, price, img, rating, time) {
+      modalItem = { name, price: parseInt(price.replace('₹','')) };
+      qty = 1;
+      document.getElementById('qtyVal').textContent = 1;
+      document.getElementById('modalTitle').textContent = name;
+      document.getElementById('modalRest').textContent = `${rest} · ⭐ ${rating} · 🕐 ${time}`;
+      document.getElementById('modalDesc').textContent = desc;
+      document.getElementById('modalPrice').textContent = price;
+      document.getElementById('modalImg').src = img;
+      document.getElementById('modalOverlay').classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('open');
+    }
+
+    function closeModalOutside(e) {
+      if (e.target === document.getElementById('modalOverlay')) closeModal();
+    }
+
+    function changeQty(delta) {
+      qty = Math.max(1, qty + delta);
+      document.getElementById('qtyVal').textContent = qty;
+    }
+
+    function addFromModal() {
+      cart.push({ ...modalItem, qty });
+      document.getElementById('cartCount').textContent = cart.length;
+      closeModal();
+      showToast(`🛒 ${qty}× ${modalItem.name} added!`);
+    }
+
+    // 🔥 UPDATED ORDER FLOW (MAIN LOGIC)
+    async function heroOrder() {
+
+      if (cart.length === 0) {
+        showToast("❌ Cart is empty");
+        return;
+      }
+
+      try {
+        let total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+        // 🔹 STEP 1: CREATE ORDER
+        const orderRes = await fetch(`${BASE_URL}/api/orders/place`, {
+          method: "POST",
+          headers: {
+<!--            "Authorization": "Bearer YOUR_TOKEN"-->
+
+                Authorization: "Bearer " + getToken()
+          }
+        });
+
+        const orderData = await orderRes.json();
+        const orderId = orderData.id;
+
+        // 🔹 STEP 2: CREATE PAYMENT
+        const paymentRes = await fetch(`${BASE_URL}/api/payment/create?amount=${total}`, {
+          method: "POST"
+        });
+
+        const paymentData = await paymentRes.json();
+
+        const options = {
+          key: "rzp_test_SZK3uWPPnUR5xh",
+          amount: paymentData.amount,
+          currency: "INR",
+          name: "TastyBuddy",
+          description: "Food Order Payment",
+          order_id: paymentData.id,
+
+          handler: async function (response) {
+
+            // 🔹 STEP 3: VERIFY PAYMENT
+            await fetch(`${BASE_URL}/api/payment/verify`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+              },
+              body: new URLSearchParams({
+                razorpayOrderId: response.razorpay_order_id,
+                razorpayPaymentId: response.razorpay_payment_id,
+                razorpaySignature: response.razorpay_signature,
+                orderId: orderId
+              })
+            });
+
+            showToast("✅ Payment Successful!");
+            cart = [];
+            document.getElementById('cartCount').textContent = 0;
+          }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.open();
+
+      } catch (err) {
+        console.error(err);
+        showToast("❌ Payment Failed");
+      }
+    }
+
+    function heroMore() {
+      openModal('Margherita Pizza','Bella Italia','Classic pizza with cheese and basil.','₹349','https://images.unsplash.com/photo-1565299624946-b28f40a0ae38','4.9','22 min');
+    }
+
+    let toastTimer;
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+
+
+
+      async function loginUser() {
+    const email = prompt("Enter Email:");
+    const password = prompt("Enter Password:");
+
+    try {
+        const res = await fetch("http://localhost:8080/api/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (data.token) {
+            localStorage.setItem("token", data.token);
+            showToast("✅ Login Successful!");
+        } else {
+            showToast("❌ Login Failed");
+        }
+
+    } catch (err) {
+        console.error(err);
+        showToast("❌ Error logging in");
+    }
+}
+
+function getToken() {
+    return localStorage.getItem("token");
+}
+    }
+</script>
+</body>
+</html>
