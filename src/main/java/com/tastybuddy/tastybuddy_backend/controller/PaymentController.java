@@ -1,116 +1,51 @@
 package com.tastybuddy.tastybuddy_backend.controller;
 
+import com.tastybuddy.tastybuddy_backend.dto.ApiMessageResponse;
+import com.tastybuddy.tastybuddy_backend.dto.PaymentCreateRequest;
+import com.tastybuddy.tastybuddy_backend.dto.PaymentOrderResponse;
+import com.tastybuddy.tastybuddy_backend.dto.PaymentVerificationRequest;
 import com.tastybuddy.tastybuddy_backend.entity.Order;
-//import com.tastybuddy.tastybuddy_backend.model.Order;
-import com.tastybuddy.tastybuddy_backend.repository.OrderRepository;
-import com.tastybuddy.tastybuddy_backend.service.PaymentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import com.tastybuddy.tastybuddy_backend.service.OrderService;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.tastybuddy.tastybuddy_backend.service.PaymentService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/payment")
+@RequiredArgsConstructor
+@Tag(name = "Payments", description = "Payment order creation and gateway verification")
+@SecurityRequirement(name = "bearerAuth")
 public class PaymentController {
 
-    @Autowired
-    private PaymentService paymentService;
+    private final PaymentService paymentService;
+    private final OrderService orderService;
 
-    @Autowired
-    private OrderService orderService;
-
-    @Autowired
-    private OrderRepository orderRepository;
-
-        // Create Payment
-        @PostMapping("/create")
-        public String createPayment(@RequestParam double amount) throws Exception {
-            return paymentService.createOrder(amount);
-        }
-
-        //  VERIFY PAYMENT (ADD HERE)
-        @PostMapping("/verify")
-        public ResponseEntity<String> verifyPayment(
-                @RequestParam String razorpayOrderId,
-                @RequestParam String razorpayPaymentId,
-                @RequestParam String razorpaySignature,
-                @RequestParam Long orderId
-        ) {
-
-            boolean isValid = paymentService.verifySignature(
-                    razorpayOrderId,
-                    razorpayPaymentId,
-                    razorpaySignature
-            );
-
-            if (!isValid) {
-                return ResponseEntity.badRequest().body("Invalid Payment ");
-            }
-
-            Order order = orderService.getOrderById(orderId);
-            order.setStatus("PAID");
-
-            orderRepository.save(order);
-
-            return ResponseEntity.ok("Payment Verified & Successful ");
-        }
+    @PostMapping("/create")
+    @Operation(summary = "Create Razorpay payment order")
+    public ResponseEntity<PaymentOrderResponse> createPayment(@Valid @RequestBody PaymentCreateRequest request) throws Exception {
+        Order order = orderService.getCurrentUserOrderById(request.getOrderId());
+        return ResponseEntity.ok(paymentService.createOrder(order));
     }
 
+    @PostMapping("/verify")
+    @Operation(summary = "Verify Razorpay payment signature")
+    public ResponseEntity<ApiMessageResponse> verifyPayment(@Valid @RequestBody PaymentVerificationRequest request) {
+        boolean isValid = paymentService.verifySignature(
+                request.getRazorpayOrderId(),
+                request.getRazorpayPaymentId(),
+                request.getRazorpaySignature()
+        );
 
+        if (!isValid) {
+            throw new IllegalArgumentException("Invalid payment signature");
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//@RestController
-//@RequestMapping("/api/payment")
-//public class PaymentController {
-//
-//    @Autowired
-//    private PaymentService paymentService;
-//
-//    @Autowired
-//    private OrderService orderService;
-//
-//    @Autowired
-//    private OrderRepository orderRepository;
-//
-//    // 🔹 STEP 4 - Create Payment Order
-//    @PostMapping("/create")
-//    public String createPayment(@RequestParam double amount) throws Exception {
-//        return paymentService.createOrder(amount);
-//    }
-
-// 🔹 STEP 5 - VERIFY PAYMENT (ADD THIS)
-//    @PostMapping("/verify")
-//    public ResponseEntity<String> verifyPayment(@RequestParam Long orderId) {
-//
-//        // 🔥 Fetch order from DB
-//        Order order = orderService.getOrderById(orderId);
-//
-//        // ✅ Update status after payment success
-//        order.setStatus("PAID");
-//
-//        orderRepository.save(order);
-//
-//        return ResponseEntity.ok("Payment Successful ✅");
-//    }
+        orderService.markOrderPaid(request.getOrderId());
+        return ResponseEntity.ok(new ApiMessageResponse("Payment verified successfully"));
+    }
+}

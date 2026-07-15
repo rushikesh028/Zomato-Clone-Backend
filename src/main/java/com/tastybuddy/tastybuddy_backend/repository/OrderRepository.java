@@ -14,4 +14,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Double getTotalRevenue();
 
     List<Order> findByUserEmail(String email);
+
+    List<Order> findAllByOrderByCreatedAtDesc();
 }
