@@ -1,5 +1,3 @@
-# Zomato Clone Backend
-
 ✨ Key Features
 🔐 Authentication & Security
 JWT-based Authentication
