@@ -79,3 +79,7 @@
 2026-07-17T10:19:51.048+05:30  WARN 20488 --- [tastybuddy-backend] [           main] c.t.t.c.StartupConfigurationValidator    : Payment endpoints are disabled until RAZORPAY_KEY and RAZORPAY_SECRET are configured.
 2026-07-17T10:19:51.048+05:30  WARN 20488 --- [tastybuddy-backend] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
 2026-07-17T10:19:51.048+05:30  WARN 20488 --- [tastybuddy-backend] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-07-17T10:20:20.160+05:30  INFO 20488 --- [tastybuddy-backend] [nio-8085-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-17T10:20:20.161+05:30  INFO 20488 --- [tastybuddy-backend] [nio-8085-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-07-17T10:20:20.163+05:30  INFO 20488 --- [tastybuddy-backend] [nio-8085-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-07-17T10:24:37.197+05:30  INFO 20488 --- [tastybuddy-backend] [nio-8085-exec-2] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 861 ms
