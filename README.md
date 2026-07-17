@@ -1,4 +1,4 @@
-# TastyBuddy Backend
+# Zomato Clone Backend
 
 Spring Boot backend for TastyBuddy with JWT authentication, validation, structured JSON errors, JPA persistence, and Razorpay payment integration.
 
