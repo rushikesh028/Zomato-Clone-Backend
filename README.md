@@ -1,37 +1,174 @@
 # Zomato Clone Backend
 
-🚀 Key Features
-Authentication & Security: Secure token-based JWT authentication with role-based access control (User/Admin).
+✨ Key Features
+🔐 Authentication & Security
+JWT-based Authentication
+Role-Based Access Control (USER / ADMIN)
+Secure Password Encryption
+Protected REST APIs
+🗄️ Database & Persistence
+Spring Data JPA
+Hibernate ORM
+MySQL Database Support
+Entity Relationship Mapping
+💳 Payment Integration
+Razorpay Payment Gateway
+Secure Checkout Workflow
+Payment Verification Support
+⚠️ Error Handling
+Global Exception Handling
+Structured JSON Error Responses
+Consistent API Error Format
+📄 API Documentation
+OpenAPI 3 Integration
+Swagger UI Support
+Interactive API Testing
+🐳 Containerization
+Docker Support
+Docker Compose Support
+Multi-Container Deployment
+🛠️ Tech Stack
+Category	Technology
+Language	Java 17
+Framework	Spring Boot
+Security	Spring Security, JWT
+ORM	Hibernate, JPA
+Database	MySQL
+Build Tool	Maven
+Payment Gateway	Razorpay
+Documentation	Swagger/OpenAPI
+Containerization	Docker, Docker Compose
+📋 Prerequisites
 
-Database & Persistence: Relational data mapping using Spring Data JPA.
+Install the following before running the project:
 
-Payment Gateway: Integrated with Razorpay for seamless checkout workflows.
+Java 17+
+Maven 3.x
+MySQL 8.x
+Docker (Optional)
+Docker Compose (Optional)
+⚙️ Environment Variables
 
-Robust Error Handling: Global exception handling delivering structured, predictable JSON error payloads.
+Create a .env file using .env.example.
 
-API Documentation: Built-in interactive API playground via OpenAPI 3 / Swagger UI.
+Production Variables
+Variable	Description
+DB_URL	Database JDBC URL
+DB_USERNAME	Database Username
+DB_PASSWORD	Database Password
+DB_DRIVER_CLASS_NAME	MySQL Driver Class
+JPA_DIALECT	Hibernate Dialect
+JPA_DDL_AUTO	Schema Strategy
+JWT_SECRET	JWT Signing Secret
+RAZORPAY_KEY	Razorpay Key ID
+RAZORPAY_SECRET	Razorpay Secret Key
+Recommended Values
+DB_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
+JPA_DIALECT=org.hibernate.dialect.MySQLDialect
+JPA_DDL_AUTO=validate
+Optional Variables
+Variable	Default
+PORT	8080
+JWT_EXPIRATION_MS	Custom
+CORS_ALLOWED_ORIGINS	Custom
+APP_SEED_DATA	false
+APP_SEED_ADMIN_EMAIL	Optional
+APP_SEED_ADMIN_PASSWORD	Optional
+🔒 Security Notes
+Never commit secrets to GitHub.
+Use a strong JWT secret.
+Store credentials in environment variables.
+Application startup will fail if JWT secret uses a placeholder value.
+Missing Razorpay credentials return 503 Service Unavailable for payment APIs.
+💻 Running Locally
+1️⃣ Quick Start
 
-Container Ready: Full Docker and Docker Compose multi-container support out of the box.
+Run directly using Maven:
 
+./mvnw spring-boot:run
 
-🛠️ Prerequisites
-Ensure you have the following installed on your local environment:
+Application URL:
 
-Java 17 or higher
+http://localhost:8080
+Default Admin Account
+Email: admin@tastybuddy.local
+Password: Admin@123
+🐳 Docker Compose Setup
 
-Maven 3.x (or use the included mvnw wrapper)
+Run application with MySQL:
 
-MySQL 8.x (if testing with a production-like database profile)
-
-Docker & Docker Compose (Optional, for containerization)
-
-⚙️ Configuration & Environment VariablesThe application relies on environment variables for configuration. A template file .env.example is provided in the root directory.Production Environment VariablesVariableDescriptionRequirement / DefaultDB_URLJDBC database connection string (e.g., jdbc:mysql://localhost:3306/tastybuddy)Required in ProdDB_USERNAMEDatabase usernameRequired in ProdDB_PASSWORDDatabase passwordRequired in ProdDB_DRIVER_CLASS_NAMEDatabase driver classcom.mysql.cj.jdbc.DriverJPA_DIALECTHibernate SQL Dialectorg.hibernate.dialect.MySQLDialectJPA_DDL_AUTOData definition structure strategyvalidate (Highly recommended for Prod)JWT_SECRETHS256/HS384/HS512 signing secret keyRequired (Must be a strong, random string)RAZORPAY_KEYRazorpay API Key IDRequired for paymentsRAZORPAY_SECRETRazorpay API Secret KeyRequired for payments⚠️ Production Security Notice:The application will safely reject startup in production mode if JWT_SECRET is left at the default placeholder value. Keep all real secrets out of source control. If Razorpay credentials are missing, payment endpoints will gracefully fall back to returning a 503 Service Unavailable status code.Optional / Development OverridesPORT: Port the server binds to (Defaults to 8080).JWT_EXPIRATION_MS: Token lifetime control.CORS_ALLOWED_ORIGINS: Comma-separated list of origins permitted to communicate with the API.APP_SEED_DATA: Set to true to auto-populate basic food catalogs on start.APP_SEED_ADMIN_EMAIL / APP_SEED_ADMIN_PASSWORD: Configures default admin bootstrap credentials.💻 Local Development Setup1. Quick Start (In-Memory / No DB Setup)For rapid local testing, you can run the application using the default profile which utilizes an in-memory repository stack and seeds data automatically.Copy .env.example to a new file named .env and fill in local adjustments if necessary.Run the application wrapper:Bash./mvnw.cmd spring-boot:run
-The service will spin up by default at: http://localhost:8080💡 Default Bootstrap Admin Credentials:Username: admin@tastybuddy.localPassword: Admin@1232. Docker Compose Strategy (App + MySQL Containerized)To test the environment cleanly alongside an automated MySQL container infrastructure:Bashdocker compose up --build
-🐳 Manual Docker DeploymentsTo package and run the application as a standalone single-container system:Bash# Build the image
+docker compose up --build
+🐳 Manual Docker Deployment
+Build Docker Image
 docker build -t tastybuddy-backend .
-
-# Run the container utilizing your environment file
+Run Docker Container
 docker run --env-file .env -p 8080:8080 tastybuddy-backend
-🧪 Build and Test LifecycleExecute unit and integration tests across components:Bash./mvnw.cmd test
-Compile, run tests, and package a production-optimized executable .jar file:Bash./mvnw.cmd clean package
-The final build artifact will be generated within the target/ output folder.📖 API & Observability EndpointsOnce the application is running locally, you can use these core endpoints to verify and inspect the system state:System DiagnosticsHealth Checks: GET http://localhost:8080/actuator/healthSystem Diagnostics info: GET http://localhost:8080/actuator/infoAPI DocumentationSwagger Interactive UI: GET http://localhost:8080/swagger-ui.htmlOpenAPI specification JSON: GET http://localhost:8080/v3/api-docsCore Route Blueprint ReferencePublic/Authentication:POST /api/users/register — Create new accounts.POST /api/auth/login — Exchange credentials for an access token.Food Catalog:GET /api/foods — Browse all menu items.GET /api/foods/categories — Browse food taxonomies.GET /api/foods/{id} — Specific dish details.Cart & Ordering Workflow:PUT /api/cart/{id} — Manage items inside active sessions.DELETE /api/cart — Clear cart status.GET /api/orders/{id} — Check specific order state and checkout records.Administrative Actions:GET /api/admin/users — Fetch platform consumer listing.GET /api/admin/orders — View generalized cross-system logs.PATCH /api/admin/orders/{id}/status — Advance or modify order workflows.
+🧪 Build & Test
+Run Tests
+./mvnw test
+Create Production Build
+./mvnw clean package
+
+Generated JAR:
+
+target/
+📖 API Documentation
+Swagger UI
+GET /swagger-ui.html
+
+Open:
+
+http://localhost:8080/swagger-ui.html
+OpenAPI JSON
+GET /v3/api-docs
+📊 Monitoring & Health Checks
+Health Endpoint
+GET /actuator/health
+Application Info
+GET /actuator/info
+🔑 Authentication APIs
+Register User
+POST /api/users/register
+Login
+POST /api/auth/login
+
+Returns JWT Access Token.
+
+🍕 Food Catalog APIs
+Get All Foods
+GET /api/foods
+Get Categories
+GET /api/foods/categories
+Get Food By ID
+GET /api/foods/{id}
+🛒 Cart APIs
+Update Cart
+PUT /api/cart/{id}
+Clear Cart
+DELETE /api/cart
+📦 Order APIs
+Get Order Details
+GET /api/orders/{id}
+👨‍💼 Admin APIs
+Get All Users
+GET /api/admin/users
+Get All Orders
+GET /api/admin/orders
+Update Order Status
+PATCH /api/admin/orders/{id}/status
+📂 Project Structure
+src
+ ├── controller
+ ├── service
+ ├── repository
+ ├── entity
+ ├── dto
+ ├── security
+ ├── exception
+ ├── config
+ └── util
+
+docker-compose.yml
+Dockerfile
+pom.xml
+README.md
