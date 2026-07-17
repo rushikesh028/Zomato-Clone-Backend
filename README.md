@@ -1,4 +1,4 @@
-# Zomato Clone Backend 🚀
+#                                         Zomato Clone Backend 
 
 A production-ready Spring Boot backend engine mimicking core food-delivery functionalities like Zomato. It features secure JWT authentication, strict request validation, structured JSON error handling, JPA persistence, and integration with the Razorpay payment gateway.
 
