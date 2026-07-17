@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: tastybuddy-mysql
+    environment:
+      MYSQL_DATABASE: tastybuddy
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_USER: tastybuddy
+      MYSQL_PASSWORD: tastybuddy
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      PORT: 8080
+      DB_URL: jdbc:mysql://mysql:3306/tastybuddy
+      DB_USERNAME: tastybuddy
+      DB_PASSWORD: tastybuddy
+      DB_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      JPA_DIALECT: org.hibernate.dialect.MySQLDialect
+      JPA_DDL_AUTO: validate
+      JWT_SECRET: replace-with-a-random-secret-at-least-32-characters
+      APP_SEED_DATA: "true"
+      APP_SEED_ADMIN_EMAIL: admin@tastybuddy.local
+      APP_SEED_ADMIN_PASSWORD: Admin@123
+      FLYWAY_BASELINE_ON_MIGRATE: "true"
+    ports:
+      - "8080:8080"
+
+volumes:
+  mysql-data:

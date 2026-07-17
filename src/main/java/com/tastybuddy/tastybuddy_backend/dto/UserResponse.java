@@ -1,0 +1,9 @@
+package com.tastybuddy.tastybuddy_backend.dto;
+
+public record UserResponse(
+        Long id,
+        String name,
+        String email,
+        String role
+) {
+}
