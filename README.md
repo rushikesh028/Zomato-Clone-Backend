@@ -82,7 +82,3 @@ Create a `.env` file in the root directory using the template provided in `.env.
 2. Build the project:
    ```bash
    ./mvnw clean package
-
-Run the application:
-./mvnw spring-boot:run
-   
